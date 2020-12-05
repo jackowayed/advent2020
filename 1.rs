@@ -4,11 +4,17 @@ use std::path::Path;
 
 fn main() {
     // File hosts must exist in current path before this produces output
-    if let Ok(lines) = read_lines("./hosts") {
+    if let Ok(lines) = read_lines("./1input.txt") {
         // Consumes the iterator, returns an (Optional) String
-        for line in lines {
-            if let Ok(ip) = line {
-                println!("{}", ip);
+        let nums: Vec<_> = lines.map(|line| line.unwrap().parse::<i32>().unwrap()).collect();
+        // Inefficient, but the corpus is small...
+        for x in &nums {
+            for y in &nums {
+                for z in &nums {
+                    if x + y + z == 2020 {
+                        println!("{}", x * y * z)
+                    }
+                }
             }
         }
     }
