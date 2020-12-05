@@ -11,8 +11,9 @@ def is_valid(line):
     char = m.group(3)
     password = m.group(4)
 
-    occurrences = password.count(char)
-    return occurrences >= minimum and occurrences <= maximum
+    one = password[minimum - 1]
+    two = password[maximum - 1]
+    return (one == char and two != char) or (two == char and one != char)
 
 def main():
     print(sum(is_valid(line.strip()) for line in fileinput.input()))
