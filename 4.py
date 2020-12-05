@@ -35,8 +35,11 @@ def field_valid(name, val):
         if val[-2:] == "in":
             return num >= 59 and num <= 76
         return num >= 150 and num <= 193
-    elif name == "hcl" or name == "ecl":
+    elif name == "hcl":
         return is_color(val)
+    elif name == "ecl":
+        return val in ("amb", "blu", "brn", 
+            "gry", "grn", "hzl", "oth")
     elif name == "pid":
         return re.match("^\d{9}$", val)
     elif name == "cid":
@@ -48,6 +51,8 @@ def check_field(token, fields):
     field_name, value = token.split(":")
     if field_valid(field_name, value):
         fields.add(field_name)
+    #else:
+    #    print((field_name, value))
 
 
 def process_line(line, fields):
