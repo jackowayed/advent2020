@@ -18,9 +18,22 @@ def part1():
     return sum
 
 def part2():
-    [line.strip() for line in fileinput.input()]
+    sum = 0
+    has_started = False
+    valid = set()
     for line in fileinput.input():
-        pass
-    return
+        if line.strip():
+            if not has_started:
+                has_started = True
+                valid = set(line.strip())
+            else:
+                valid &= set(line.strip())
+        else:
+            sum += len(valid)
+            has_started = False
+    if valid and has_started:
+        sum += len(valid)
+    return sum
 
-print(part1())
+
+print(part2())
