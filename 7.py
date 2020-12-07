@@ -33,18 +33,21 @@ def dfs(graph, start, search):
 
 def part1():
     graph = parse()
-    print(graph)
     count = 0
     for outer_bag in graph.keys():
-        if outer_bag is not "shiny gold" and dfs(graph, outer_bag, "shiny gold"):
+        if outer_bag != "shiny gold" and dfs(graph, outer_bag, "shiny gold"):
             count += 1
     print(count)
+
+def dfs_count(graph, start):
+    ct = 1
+    for bag, n in graph[start]:
+        ct += n * dfs_count(graph, bag)
+    return ct
         
 
 def part2():
-    [line.strip() for line in fileinput.input()]
-    for line in fileinput.input():
-        pass
-    return
+    graph = parse()
+    print(dfs_count(graph, "shiny gold") - 1)
 
 part1()
