@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import fileinput
+import re
 
 
 def part1():
@@ -15,4 +16,5 @@ def part2():
         pass
     return
 
-part1()
+print(part1())
+#print(part2())
