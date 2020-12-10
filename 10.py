@@ -44,9 +44,8 @@ def arrangements_logic(nums, after_idx):
     for idx in range(after_idx + 1, after_idx + 4):
         if idx < len(nums):
             pass#print(nums[idx] - nums[after_idx])
-        if idx < len(nums) and ((nums[idx] - nums[after_idx]) in (1,3)):
-            print(f"made it {(nums[after_idx], nums[idx])}")
-            sum += arrangements_logic(nums, idx)
+        if idx < len(nums) and (nums[idx] - nums[after_idx]) <= 3:
+            sum += arrangements(nums, idx)
     return sum
 
     
