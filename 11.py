@@ -38,6 +38,42 @@ def apply_rules(old_seats):
     return seats
 
 
+def check(seats, x, y, dx, dy):
+    nx = x + dx
+    ny = y + dy
+    if nx < 0 or ny < 0 or nx == len(seats) or ny == len(seats[0]):
+        return False
+    if seats[nx][ny] == ".":
+        return check(seats, nx, ny, dx, dy)
+    else:
+        return seats[nx][ny] == "#"
+
+
+def get_visible(old_seats, x, y):
+    ct = 0
+    for dx in range(-1, 2):
+        for dy in range(-1, 2):
+            if dx == 0 and dy == 0:
+                continue
+            ct += check(old_seats, x, y, dx, dy)
+    return ct
+
+
+def apply_new_rules(old_seats):
+    seats = copy(old_seats)
+    for x in range(len(seats)):
+        for y in range(len(seats[0])):
+            if seats[x][y] == ".":
+                continue
+            ct = get_visible(old_seats, x, y)
+            if ct == 0 and old_seats[x][y] == "L":
+                seats[x][y] = "#"
+            elif ct >= 5 and old_seats[x][y] == "#":
+                seats[x][y] = "L"
+    return seats
+
+
+
 def part1():
     seats = get_map()
     while True:
@@ -53,10 +89,18 @@ def part1():
     return ct
 
 def part2():
-    [line.strip() for line in fileinput.input()]
-    for line in fileinput.input():
-        pass
-    return
+    seats = get_map()
+    while True:
+        old_seats = seats
+        seats = apply_new_rules(old_seats)
+        if old_seats == seats:
+            break
+    ct = 0
+    for x in range(len(seats)):
+        for y in range(len(seats[0])):
+            if seats[x][y] == "#":
+                ct += 1
+    return ct
 
-print(part1())
-#print(part2())
+#print(part1())
+print(part2())
