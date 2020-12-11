@@ -20,9 +20,12 @@ def get_adjacent(seats, x, y):
                 ct += 1
     return ct
 
+def copy(seats):
+    return [row.copy() for row in seats]
+
 
 def apply_rules(old_seats):
-    seats = old_seats.copy()
+    seats = copy(old_seats)
     for x in range(len(seats)):
         for y in range(len(seats[0])):
             if seats[x][y] == ".":
