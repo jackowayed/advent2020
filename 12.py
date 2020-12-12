@@ -3,42 +3,41 @@
 import fileinput
 import re
 
+def sign(n):
+    if n < 0:
+        return -1
+    if n > 0:
+        return 1
+    return 0
+
 
 def rotate(dir, deg, dy, dx):
-    HEADINGS = [(-1, 0), (0, -1), (1, 0), (0, 1)]
-    start_idx = HEADINGS.index((dy, dx))
-    rotations = deg // 90
-    if dir == "L":
-        rotations *= -1
-    return HEADINGS[(start_idx + rotations) % len(HEADINGS)]
-
-
-def dead_code():
     if deg == 180:
-        dy = -dy
-        dx = -dx
-    elif deg == 270:
-        dir = "R" if dir == "L" else "L"
-        return rotate(dir, 90, dy, dx)
-    assert deg == 90
+        return (-dy, -dx)
+    if deg == 270 and dir == "R" or deg == 90 and dir == "L":
+        return (dx, -dy)
+    else:
+        assert deg == 90 and dir == "R" or deg == 270 and dir == "L"
+        return (-dx, dy)
 
 
-def part1():
-    dy = 0
-    dx = 1
+
+def part2():
+    dy = 1
+    dx = 10
     x = 0
     y = 0
     for line in fileinput.input():
         dir = line[0]
         val = int(line[1:])
         if dir == "N":
-            y += val
+            dy += val
         elif dir == "S":
-            y -= val
+            dy -= val
         elif dir == "E":
-            x += val
+            dx += val
         elif dir == "W":
-            x -= val
+            dx -= val
         elif dir == "F":
             x += dx * val
             y += dy * val
@@ -47,11 +46,4 @@ def part1():
             dy, dx = rotate(dir, val, dy, dx)
     return abs(x) + abs(y)
 
-def part2():
-    [line.strip() for line in fileinput.input()]
-    for line in fileinput.input():
-        pass
-    return
-
-print(part1())
-#print(part2())
+print(part2())
