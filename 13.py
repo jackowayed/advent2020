@@ -17,11 +17,35 @@ def part1():
             min_freq = freq
     return min_freq * min_
 
+def safe_int(s):
+    if s == "x":
+        return None
+    return int(s)
+
+def evaluate(buses, t):
+    assert t % buses[0] == 0
+    for b in buses:
+        if b is None:
+            pass
+        elif t % b != 0:
+            return False
+        t += 1
+    return True
+
+
 def part2():
-    [line.strip() for line in fileinput.input()]
-    for line in fileinput.input():
-        pass
+    lines = [line.strip() for line in fileinput.input()]
+    buses = [safe_int(l) for l in lines[1].split(",")]
+    t = 100000000000000
+    while t % buses[0] != 0:
+        t += 1
+    while True:
+        if evaluate(buses, t):
+            return t
+        t += buses[0]
+
+    print(buses)
     return
 
-print(part1())
-#print(part2())
+#print(part1())
+print(part2())
