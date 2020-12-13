@@ -41,9 +41,10 @@ def brute_euclid(y, n):
 # https://brilliant.org/wiki/chinese-remainder-theorem/
 def solve(buses):
     mods = []
-    for i, val in enumerate(buses):
-        if val:
-            mods.append((i, val))
+    for offset, mod in enumerate(buses):
+        if mod:
+            rem = (mod - offset) % mod
+            mods.append((rem, mod))
     big_n = 1
     for _, mod in mods:
         big_n *= mod
@@ -52,7 +53,7 @@ def solve(buses):
         y_i = big_n // mod
         z_i = brute_euclid(y_i, mod)
         x += a_i * y_i * z_i
-    return x
+    return x % big_n
     
 
 def part2():
