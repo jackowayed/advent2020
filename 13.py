@@ -32,20 +32,33 @@ def evaluate(buses, t):
         t += 1
     return True
 
+def brute_euclid(y, n):
+    for z in range(n):
+        if (z * y) % n == 1:
+            return z
+    assert False
+
+# https://brilliant.org/wiki/chinese-remainder-theorem/
+def solve(buses):
+    mods = []
+    for i, val in enumerate(buses):
+        if val:
+            mods.append((i, val))
+    big_n = 1
+    for _, mod in mods:
+        big_n *= mod
+    x = 0
+    for a_i, mod in mods:
+        y_i = big_n // mod
+        z_i = brute_euclid(y_i, mod)
+        x += a_i * y_i * z_i
+    return x
+    
 
 def part2():
     lines = [line.strip() for line in fileinput.input()]
     buses = [safe_int(l) for l in lines[1].split(",")]
-    t = 100000000000000
-    while t % buses[0] != 0:
-        t += 1
-    while True:
-        if evaluate(buses, t):
-            return t
-        t += buses[0]
-
-    print(buses)
-    return
+    return solve(buses)
 
 #print(part1())
 print(part2())
