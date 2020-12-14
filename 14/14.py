@@ -20,23 +20,23 @@ def masks_(mask_str):
                 new_additions.append(add)
                 new_additions.append(add + val)
             additions = new_additions
-    return [starter + add for add in additions]
+    return additions
 
 def part2():
     mem = collections.defaultdict(int)
-    masks = None
+    or_mask = None
     for line in fileinput.input():
         if line.startswith("mask"):
             mask_str = line.strip()[7:]
-            masks = masks_(mask_str)
-            print(len(masks))
+            or_mask = ormask(mask_str)
+            and_masks = masks_(mask_str)
             #print([bin(m) for m in masks])
         else:
             assert line.startswith("mem")
             g = re.match(r"^mem\[(\d+)\] = (\d+)$", line)
             addr, val = g.groups()
-            for mask in masks:
-                mem[int(addr) | mask] = int(val)
+            for mask in and_masks:
+                mem[int(addr) | or_mask & mask] = int(val)
     print(mem)
     return sum(mem.values())
 
