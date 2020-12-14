@@ -11,16 +11,21 @@ def ormask(mask_str):
 
 def do_mask(v, mask_str):
     v |= ormask(mask_str)
-    vals = [v]
+    print("start")
+    # (or_mask, and_mask)
+    masks = [(0, 2**35)]
     for place in range(len(mask_str)):
         if mask_str[-(place+1)] == "X":
             mask = 2 ** (place)
-            new_vals = []
-            for v in vals:
-                new_vals.append(v & mask)
-                new_vals.append(v | mask)
-            vals = new_vals
-    return vals
+            new_masks = []
+            for or_mask, and_mask in masks:
+                # turn the bit on
+                new_masks.append((or_mask + mask, and_mask))
+                # turn the bit off
+                new_masks.append((or_mask, and_mask - mask))
+            print((masks, new_masks, mask))
+            masks = new_masks
+    return [v | or_mask & and_mask for or_mask, and_mask in masks]
 
 def part2():
     mem = collections.defaultdict(int)
