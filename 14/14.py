@@ -9,35 +9,34 @@ def ormask(mask_str):
     mask = mask_str.replace("X", "0")
     return int(mask, 2)
 
-def masks_(mask_str):
-    starter = ormask(mask_str)
-    additions = [0]
+def do_mask(v, mask_str):
+    v |= ormask(mask_str)
+    vals = [v]
     for place in range(len(mask_str)):
         if mask_str[-(place+1)] == "X":
-            val = 2 ** (place)
-            new_additions = []
-            for add in additions:
-                new_additions.append(add)
-                new_additions.append(add + val)
-            additions = new_additions
-    return additions
+            mask = 2 ** (place)
+            new_vals = []
+            for v in vals:
+                new_vals.append(v & mask)
+                new_vals.append(v | mask)
+            vals = new_vals
+    return vals
 
 def part2():
     mem = collections.defaultdict(int)
-    or_mask = None
+    mask_str = None
     for line in fileinput.input():
         if line.startswith("mask"):
             mask_str = line.strip()[7:]
-            or_mask = ormask(mask_str)
-            and_masks = masks_(mask_str)
             #print([bin(m) for m in masks])
         else:
             assert line.startswith("mem")
             g = re.match(r"^mem\[(\d+)\] = (\d+)$", line)
-            addr, val = g.groups()
-            for mask in and_masks:
-                mem[int(addr) | or_mask & mask] = int(val)
-    print(mem)
+            addr_s, val = g.groups()
+            for addr in do_mask(int(addr_s), mask_str):
+                mem[addr] = int(val)
+    for k, v in sorted(mem.items()):
+        print((bin(k), v))
     return sum(mem.values())
 
 def part1():
