@@ -17,7 +17,7 @@ def part1():
     last_num = 0
     last_num_age = turn - last[0]
     last[last_num] = turn
-    while turn < 2020:
+    while turn < 30000000:
         turn += 1
         last_num = last_num_age
         if last_num in last:
