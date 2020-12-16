@@ -14,14 +14,23 @@ def field_valid(f, rules):
     return any(field_matches_rule(f, rule) for rule in rules)
 
 def ticket_valid(ticket, rules):
-    return sum((0 if field_valid(f, rules.values()) else f)
-         for f in ticket)
+    return all(field_valid(f, rules.values()) for f in ticket)
+
+
+
+
+def do_ticket(ticket, rules, valids):
+    for i, f in enumerate(ticket):
+        for name, rule in rules.items():
+            if not field_matches_rule(f, rule):
+                valids[i].discard(name)
+
 
 
 def parse_ticket(s):
     return list(map(int, s.split(",")))
 
-def part1():
+def part2():
     field_ranges = dict()
     it = fileinput.input()
     for line_ in it:
@@ -38,13 +47,19 @@ def part1():
     assert not next(it).strip()
     assert next(it).startswith("nearby tickets")
     nearby_tickets = [parse_ticket(line) for line in it if line.strip()]
-    return sum(ticket_valid(ticket, field_ranges) for ticket in nearby_tickets)
+    valid_tickets = list(filter(lambda ticket: ticket_valid(ticket, field_ranges), nearby_tickets))
+    valid_tickets.append(my_ticket)
 
-def part2():
-    [line.strip() for line in fileinput.input()]
-    for line in fileinput.input():
-        pass
-    return
+    num_fields = len(valid_tickets[0])
+    assert num_fields == len(field_ranges)
+    valids = [set(field_ranges.keys()) for _ in range(num_fields)]
+    for t in valid_tickets:
+        do_ticket(t, field_ranges, valids)
+    print(valids)
 
-print(part1())
+
+
+
+
+print(part2())
 #print(part2())
