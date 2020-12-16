@@ -55,7 +55,29 @@ def part2():
     valids = [set(field_ranges.keys()) for _ in range(num_fields)]
     for t in valid_tickets:
         do_ticket(t, field_ranges, valids)
-    print(valids)
+    #print(valids)
+    #print([len(v) for v in valids])
+    decisions = [None for _ in valids]
+    did_progress = True
+    while did_progress:
+        did_progress = False
+        for i, v in enumerate(valids):
+            if decisions[i]:
+                continue
+            if len(valids[i]) == 1:
+                decisions[i] = valids[i].pop()
+                for j,_ in enumerate(valids):
+                    valids[j].discard(decisions[i])
+                did_progress = True
+    p = 1
+    for i,name in enumerate(decisions):
+        if name.startswith("departure"):
+            print(my_ticket[i])
+            p *= my_ticket[i]
+    return p
+    #print([len(v) for v in valids])
+    #print(decisions)
+
 
 
 
