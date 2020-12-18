@@ -49,15 +49,12 @@ class Evaler:
             self.update()
         return self.val
 
-def eval_it(it):
-    Evaler().eval(it)
-    
 def eval(s):
     return Evaler().eval(s.__iter__())
 
 
 def part1():
-    return sum([eval(line) for line in fileinput.input()])
+    return sum([eval(line.strip()) for line in fileinput.input()])
 
 def part2():
     [line.strip() for line in fileinput.input()]
@@ -80,6 +77,6 @@ class Test(unittest.TestCase):
 
 
 
-unittest.main()
-#print(part1())
+#unittest.main()
+print(part1())
 #print(part2())
