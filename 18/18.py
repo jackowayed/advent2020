@@ -39,9 +39,11 @@ class Evaler:
                 break
             elif c == " ":
                 self.update()
-            elif c in ("+", "*"):
-                self.operator = c
+            elif c == "*":
                 assert next(it) == " "
+                self.val *= eval(it)
+            elif c == "+":
+                self.operator = c
             else:
                 int(c) # must be digit
                 self.curr_token += c
@@ -70,13 +72,13 @@ class Test(unittest.TestCase):
         self.assertEqual(7, eval("1 + (2 * 3)"))
 
     def test_from_advent(self):
-        self.assertEqual(eval("2 * 3 + (4 * 5)"), 26)
-        self.assertEqual(eval("5 + (8 * 3 + 9 + 3 * 4 * 3)") , 437)
-        self.assertEqual(eval("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))") , 12240)
-        self.assertEqual(eval("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2") , 13632)
+        self.assertEqual(eval("2 * 3 + (4 * 5)"), 46)
+        self.assertEqual(eval("5 + (8 * 3 + 9 + 3 * 4 * 3)") , 1445)
+        self.assertEqual(eval("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))") , 669060)
+        self.assertEqual(eval("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2") , 23340)
 
 
 
-#unittest.main()
-print(part1())
+unittest.main()
+#print(part1())
 #print(part2())
