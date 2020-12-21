@@ -22,13 +22,17 @@ def part1():
             else:
                 poss[a] = set(ingredients)
     print(poss)
-    poss_i = set()
-    for ingredients in poss.values():
-        poss_i |= ingredients
-    ct = 0
-    for ingredients, _ in w:
-        ct += sum(i not in poss_i for i in ingredients)
-    return ct
+    done = False
+    while not done:
+        done = True
+        for a, i in poss.items():
+            if len(i) == 1:
+                for a_, i_ in poss.items():
+                    if a_ != a and i < i_:
+                        i_ -= i
+                        done = False
+    return ",".join([i.pop() for a, i in sorted(poss.items())])
+
 
 def part2():
     [line.strip() for line in fileinput.input()]
