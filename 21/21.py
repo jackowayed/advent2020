@@ -7,29 +7,27 @@ import re
 
 def parse(line):
     m = re.fullmatch("(.*) \(contains (.*)\)", line)
-    ingredients = m.group(1).split(" ")
+    ingredients = set(m.group(1).split(" "))
     allergens = set(m.group(2).split(", "))
     return (ingredients, allergens)
 
 
 def part1():
     w = [parse(line.strip()) for line in fileinput.input()]
-    possible_allergens = dict()
+    poss = dict()
     for ingredients, allergens in w:
-        for i in ingredients:
-            if i in possible_allergens:
-                possible_allergens[i] &= allergens
+        for a in allergens:
+            if a in poss:
+                poss[a] &= ingredients
             else:
-                possible_allergens[i] = allergens
-    print(possible_allergens)
-    none = set()
-    for i, allergens in possible_allergens.items():
-        if not allergens:
-            none.add(i)
-    print(none)
+                poss[a] = set(ingredients)
+    print(poss)
+    poss_i = set()
+    for ingredients in poss.values():
+        poss_i |= ingredients
     ct = 0
     for ingredients, _ in w:
-        ct += sum(i in none for i in ingredients)
+        ct += sum(i not in poss_i for i in ingredients)
     return ct
 
 def part2():
