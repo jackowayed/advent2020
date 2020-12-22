@@ -8,12 +8,18 @@ import re
 
 def hashable(dq):
     out =  ",".join(str(i) for i in dq)
-    #print(out)
     return out
 
 def hashables(one, two):
-    print(f"{hashable(one)}|{hashable(two)}")
+    #print(f"{hashable(one)}|{hashable(two)}")
     return f"{hashable(one)}|{hashable(two)}"
+
+
+def copy(dq, l):
+    c = dq.copy()
+    while len(c) > l:
+        c.pop()
+    return c
 
 def play2(one, two):
     history = set()
@@ -26,9 +32,8 @@ def play2(one, two):
         two_c = two.popleft()
         winner = None
         if one_c <= len(one) and two_c <= len(two):
-            c1 = one.copy()
-            c2 = two.copy()
-            deck, winner = play2(c1, c2)
+            deck, winner = play2(copy(one, one_c),
+                copy(two, two_c))
         else:
             if one_c > two_c:
                 winner = "one"
