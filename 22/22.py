@@ -25,7 +25,6 @@ def play2(one, two):
     history = set()
     while one and two:
         if (hashables(one, two)) in history:
-            print("the rule")
             return one, "one"
         history.add(hashables(one, two))
         one_c = one.popleft()
