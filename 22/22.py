@@ -5,11 +5,59 @@ import fileinput
 import re
 
 
+
+def hashable(dq):
+    out =  ",".join(str(i) for i in dq)
+    #print(out)
+    return out
+
+def hashables(one, two):
+    print(f"{hashable(one)}|{hashable(two)}")
+    return f"{hashable(one)}|{hashable(two)}"
+
+def play2(one, two):
+    history = set()
+    while one and two:
+        if (hashables(one, two)) in history:
+            print("the rule")
+            return one, "one"
+        history.add(hashables(one, two))
+        one_c = one.popleft()
+        two_c = two.popleft()
+        winner = None
+        if one_c <= len(one) and two_c <= len(two):
+            c1 = one.copy()
+            c2 = two.copy()
+            deck, winner = play2(c1, c2)
+        else:
+            if one_c > two_c:
+                winner = "one"
+            else:
+                winner = "two"
+        if winner == "one":
+            one.append(one_c)
+            one.append(two_c)
+        else:
+            assert winner == "two", winner
+            two.append(two_c)
+            two.append(one_c)
+        
+    if one:
+        return one, "one"
+    else:
+        return two, "two"
+
+
+
 def part2():
-    [line.strip() for line in fileinput.input()]
-    for line in fileinput.input():
-        pass
-    return
+    it = fileinput.input()
+    assert next(it) == "Player 1:\n"
+    deck_one = read_deck(it)
+    assert next(it) == "Player 2:\n"
+    deck_two = read_deck(it)
+    winner, _ = play2(deck_one, deck_two)
+    return score(winner)
+
 
 def read_deck(it):
     deck = collections.deque()
@@ -54,5 +102,5 @@ def part1():
     winner = play(deck_one, deck_two)
     return score(winner)
 
-print(part1())
-#print(part2())
+#print(part1())
+print(part2())
