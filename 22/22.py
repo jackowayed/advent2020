@@ -7,12 +7,11 @@ import re
 
 
 def hashable(dq):
-    out =  ",".join(str(i) for i in dq)
+    out =  tuple(dq)
     return out
 
 def hashables(one, two):
-    #print(f"{hashable(one)}|{hashable(two)}")
-    return f"{hashable(one)}|{hashable(two)}"
+    return (hashable(one), hashable(two))
 
 
 def copy(dq, l):
