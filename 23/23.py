@@ -76,8 +76,6 @@ class CircularList:
         node.next = new_node
         new_node.prev = node
         assert node.next != node, node.val
-        #if new_node.val in self.index and self.index[new_node.val] != new_node:
-            #assert False, f"{new_node.val} {"
         self.index[new_node.val] = new_node
 
     def remove_after(self,node):
@@ -122,9 +120,7 @@ def part2():
         cl.insert_at_tail(int(c))
     for i in range(len(input) + 1, N_CUPS + 1):
         cl.insert_at_tail(i)
-    print(len(cl))
     solve(cl, 10000000)
-    print(cl)
     print((cl.head.next.val, cl.head.next.next.val))
     return cl.head.next.val * cl.head.next.next.val
 
