@@ -38,13 +38,45 @@ def part1():
     for flip in flips:
         tile = find_tile(flip)
         black[tile] = not black[tile]
+    return count_black_dict(black)
+
+
+def get_neighbors(x, y):
+    return [(x + dx, y + dy) for dx, dy in MOVES.values()]
+
+def count_black_dict(black):
     return sum(v for v in black.values())
 
-def part2():
-    [line.strip() for line in fileinput.input()]
-    for line in fileinput.input():
-        pass
-    return
+def count_black(iter, black):
+    return sum(black[coords] for coords in iter)
 
-print(part1())
-#print(part2())
+def do_turn(x, y, black, new_black):
+    if (x, y) in new_black:
+        return
+    neighbors = get_neighbors(x, y)
+    black_neighbors = count_black(neighbors, black)
+    new_black[(x, y)] = (black_neighbors == 2 or (black[(x, y)] and black_neighbors == 1))
+    if black[(x, y)]:
+        for x_, y_ in neighbors:
+            do_turn(x_, y_, black, new_black)
+
+
+def next_turn(black):
+    new_black = collections.defaultdict(bool)
+    for x, y in list(black.keys()):
+        do_turn(x, y, black, new_black)
+    return new_black
+
+
+def part2():
+    flips = [line.strip() for line in fileinput.input()]
+    black = collections.defaultdict(bool)
+    for flip in flips:
+        tile = find_tile(flip)
+        black[tile] = not black[tile]
+    for _ in range(100):
+        black = next_turn(black)
+    return count_black_dict(black)
+
+#print(part1())
+print(part2())
